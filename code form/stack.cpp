@@ -1,80 +1,115 @@
-#include<bits/stdc++.h>
+ï»¿//#include "pch.h"
+
+#include <iostream>
+#include<string>
+
+#define MAX_SIZE 100
 
 using namespace std;
 
-struct GiangVien
+typedef char TypeOfItem;
+
+struct Stack
 {
-    string mgv;
-    string ten;
-    string hocvi;
-    int mlg;
+	int top;
+	TypeOfItem nodes[MAX_SIZE];
 };
-typedef GiangVien gv;
-struct NODE
+
+void initialize(Stack *s)
 {
-    gv data;
-    NODE *next;
-};
-typedef NODE *node;
-void tao(node *L)
-{
-    *L=NULL;
+	s->top = -1;
 }
-bool isEmpty(node L)
+
+bool isEmpty(Stack s)
 {
-    return((L==NULL) ? true : false);
+	return s.top == -1;
 }
-node createNode(gv data)
+
+bool isFull(Stack s)
 {
-    node newnode = new NODE;
-    newnode->data=data;
-    newnode->next=NULL;
-    return newnode;
+	return s.top == MAX_SIZE - 1;
 }
-void printNodeInfo(node L)
+
+int sizeOfStack(Stack s)
 {
-    cout << "Ho ten giang vien :" << L->data.ten << endl;
-    cout << "Ma giang vien :" << L->data.mgv << endl;
-    cout << "hoc vi :" << L->data.hocvi << endl;
-    cout << "Muc luong :" << L->data.mlg << endl;
+	return s.top + 1;
 }
-void insertHead(node *L, gv data)
+
+void push(TypeOfItem x, Stack *s)
 {
-    node newnode = createNode(data);
-    if (*L==NULL)
-        *L=newnode;
-    else
-    {
-        newnode->next=*L;
-        *L=newnode;
-    }
+	if (isFull(*s))
+		cout << "Ngan xep da day" << endl;
+	else s->nodes[++(s->top)] = x;
 }
-void insertTail(node *L, gv data)
+
+void pop(Stack *s, TypeOfItem *x)
 {
-    node newnode = createNode(data);
-    if (*L==NULL)
-        *L=newnode;
-    else
-    {
-        node p = *L;
-        while (p!= NULL)
-            p=p->next;
-        p->next=newnode;
-    }
+	if (isEmpty(*s))
+		cout << "Ngan xep rong" << endl;
+	else
+	{
+		*x = s->nodes[s->top];
+		s->top--;
+	}
 }
-void insertAfter(node q,node *L, gv data)
+
+void bai_toan_doi_co_so()
 {
-    if (q==NULL)
-        cout << "khong them duoc !!!";
-    else
-    {
-        node p= createNode(data);
-        q->next=p->next;
-        q->next=p;
-    }
+	int pd, pn, a;
+	char x;
+	int coso;
+	Stack s;
+
+	initialize(&s);
+	cout << "Nhap so o he co so 10 la: ";
+	cin >> a;
+	cout << "Nhap co so can chuyen: ";
+	cin >> coso;
+
+	pn = a;
+	while (pn != 0)
+	{
+		pd = pn % coso;
+		if (pd >= 10) x = 'A' + pd % 10;
+		else x = '0' + pd;
+		push(x, &s);
+		pn = pn / coso;
+	}
+
+	cout << "So o he co so 10 la: " << a << endl;
+	cout << "So o he co so " << coso << " la: ";
+
+	while (!isEmpty(s))
+	{
+		pop(&s, &x);
+		cout << x;
+	}
+
+	cout << endl;
+}
+
+void bai_toan_chuoi_ngoac_don_hop_le()
+{
+	char str[] = "(())()";
+	char x;
+	Stack s;
+
+	initialize(&s);
+	
+	int len = strlen(str);
+	for (int i = 0; i < len; i++)
+	{
+		if (str[i] == '(') push('(', &s);
+		else if (str[i] == ')') pop(&s, &x);
+	}
+	
+	if (isEmpty(s))
+		cout << "Bieu thuc " << str << " DUNG" << endl;
+	else cout << "Bieu thuc " << str << " SAI" << endl;
 }
 
 int main()
 {
-    return 0;
+	//bai_toan_doi_co_so();
+	bai_toan_chuoi_ngoac_don_hop_le();
 }
